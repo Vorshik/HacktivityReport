@@ -34,6 +34,7 @@ def tel_send_message(chat_id,payload):
     return r
 
 def tel_send_photo(chat_id,photoURL,caption):
+
     URL = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 
     payload = {
@@ -55,6 +56,7 @@ def index():
 
         try:
             if(command == '/start'):
+
                 GreetingMsg = f"<b>Hello {msg['message']['from']['username']}! Glad to see you here!\n\rI'll be sending you reports of hacktivity from H1\n\rUse /help to see all capabilities.</b>"
                 tel_send_message(chat_id, GreetingMsg)
             
