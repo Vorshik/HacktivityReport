@@ -1,6 +1,4 @@
-from threading import Thread
 from time import sleep
-from click import command
 from flask import request
 from flask import Response
 import requests
@@ -9,10 +7,18 @@ from bot.variables import TOKEN, HOST_URL
 from bot.H1Reports import h1Reports
 from bot import app
 from bot import db
+from bot import scheduler
+from flask import jsonify
 from bot.models import DuplicateReport
 
 requests.get(f'https://api.telegram.org/bot{TOKEN}/setWebhook?remove')
 requests.get(f'https://api.telegram.org/bot{TOKEN}/setWebhook?url={HOST_URL}')
+
+def healthRequest():
+    r = requests.get(f'{HOST_URL}/healthcheck')
+    return r 
+
+scheduler.add_job(id="HealthCheck", func=healthRequest, trigger='interval', seconds=12000)
 
 def parse_message(message):
     chat_id = message['message']['chat']['id']
@@ -46,6 +52,11 @@ def tel_send_photo(chat_id,photoURL,caption):
 
     r = requests.post(URL, json=payload)
     return r
+
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    status = {"status":"ok"}
+    return jsonify(status)
 
 @app.route('/', methods=['GET','POST'])
 def index():

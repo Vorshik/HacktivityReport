@@ -11,6 +11,7 @@ load-dotenv = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 gunicorn = "*"
+flask-apscheduler = "*"
 
 [dev-packages]
 
