@@ -1,0 +1,1 @@
+# This directory is for storing database with default setup

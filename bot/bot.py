@@ -1,6 +1,4 @@
-from threading import Thread
 from time import sleep
-from click import command
 from flask import request
 from flask import Response
 import requests
@@ -9,10 +7,18 @@ from bot.variables import TOKEN, HOST_URL
 from bot.H1Reports import h1Reports
 from bot import app
 from bot import db
+from bot import scheduler
+from flask import jsonify, abort
 from bot.models import DuplicateReport
 
 requests.get(f'https://api.telegram.org/bot{TOKEN}/setWebhook?remove')
-requests.get(f'https://api.telegram.org/bot{TOKEN}/setWebhook?url={HOST_URL}')
+requests.get(f'https://api.telegram.org/bot{TOKEN}/setWebhook?url={HOST_URL}&drop_pending_updates=True')
+
+def healthRequest():
+    r = requests.get(f'{HOST_URL}/healthcheck')
+    return r 
+
+scheduler.add_job(id="HealthCheck", func=healthRequest, trigger='interval', seconds=12000)
 
 def parse_message(message):
     chat_id = message['message']['chat']['id']
@@ -46,6 +52,11 @@ def tel_send_photo(chat_id,photoURL,caption):
 
     r = requests.post(URL, json=payload)
     return r
+
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    status = {"status":"ok"}
+    return jsonify(status)
 
 @app.route('/', methods=['GET','POST'])
 def index():
@@ -112,7 +123,7 @@ def index():
                 tel_send_message(chat_id, Message)
 
             elif(command == '/help'):
-                tel_send_message(chat_id, "<b>Use these commands to interact with the bot.\n\r/start - Use this command to start your bot.\n\r/update - Use this command to initiate an update process from H1 (It make take several seconds to run this command).\n\r/help - Use this command to display bot's possibility.</b>")
+                tel_send_message(chat_id, "<b>Use these commands to interact with the bot.\n\r/start - Use this command to start your bot.\n\r/update - Use this command to initiate an update process from H1 (It make take several seconds to run this command).\n\r/leave - Use this command to erase all information related to you from our database before you leave.\n\r/help - Use this command to display bot's possibility.</b>")
 
             else:
                 tel_send_message(chat_id, "<b>Can't recognise this command.\n\rTry to use /help to view the allowed list of commands.</b>")
@@ -120,7 +131,9 @@ def index():
             return Response('ok', status=200)
         
         except Exception as e:
-            print(e)
+            print(f'ERROR--> {e}')
+            tel_send_message(chat_id, "<b>Sorry, something went wrong &#128532;</b>")
+            return Response('Required parameters missing', status=200)
     
     else:
         return "<h1>Welcome!</h1>"
