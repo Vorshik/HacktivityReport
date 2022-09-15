@@ -12,6 +12,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 gunicorn = "*"
 flask-apscheduler = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
