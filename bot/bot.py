@@ -8,7 +8,7 @@ from bot.H1Reports import h1Reports
 from bot import app
 from bot import db
 from bot import scheduler
-from flask import jsonify
+from flask import jsonify, abort
 from bot.models import DuplicateReport
 
 requests.get(f'https://api.telegram.org/bot{TOKEN}/setWebhook?remove')
@@ -131,7 +131,8 @@ def index():
             return Response('ok', status=200)
         
         except Exception as e:
-            print(e)
+            print(f'ERROR--> {e}')
+            abort(400, description="Required parameters missing")
     
     else:
         return "<h1>Welcome!</h1>"
