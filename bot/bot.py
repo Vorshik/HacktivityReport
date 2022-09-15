@@ -76,13 +76,13 @@ def index():
                 H1Reports = h1Reports()
                 DupReport = False
                 isUpdated = False
-                dbrecord = DuplicateReport.query.filter_by(chat_id=chat_id).first()
+                dbrecord = DuplicateReport.query.filter_by(chat_id=f'{chat_id}').first()
                 
                 if not dbrecord:
-                    newUser = DuplicateReport(chat_id=chat_id)
+                    newUser = DuplicateReport(chat_id=f'{chat_id}')
                     db.session.add(newUser)
                     db.session.commit()
-                    dbrecord = DuplicateReport.query.filter_by(chat_id=chat_id).first()
+                    dbrecord = DuplicateReport.query.filter_by(chat_id=f'{chat_id}').first()
 
                 
                 for report in reversed(H1Reports):
@@ -113,7 +113,7 @@ def index():
 
             elif(command == '/leave'):
 
-                dbrecord = DuplicateReport.query.filter_by(chat_id=chat_id).first()
+                dbrecord = DuplicateReport.query.filter_by(chat_id=f'{chat_id}').first()
                 Message = f"<b>It was pleasure to work with you {msg['message']['from']['username']}! &#128546;\n\r\n\rAs you decided to leave the bot make the following actions:\n\r\n\r1. Open the bot menu and tap on 'Stop Bot' or 'Delete Chat' button.\n\r2. On your wish you can delete Chat with me by tapping on 'Clear messages' in the bot's menu.</b>"
 
                 if dbrecord:
