@@ -4,9 +4,6 @@ COPY . /HacktivityReport
 WORKDIR /HacktivityReport
 
 RUN pip3 install -r requirements.txt
-
-WORKDIR /HacktivityReport
-RUN flask db migrate
 RUN flask db upgrade
 
 EXPOSE 8000
