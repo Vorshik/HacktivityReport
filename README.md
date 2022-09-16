@@ -39,7 +39,7 @@ This telegram bot was created to collect hacktivity reports from different platf
 4. Clone the repository with `git clone https://github.com/Vorshik/HacktivityReport.git`.
 5. Go into a cloned folder with `cd HacktivityReport`.
 6. Create new **.env** file in this folder with the content as in the [.env_example](.env_example) file.
-![Image_env](https://user-images.githubusercontent.com/58830879/190618823-f68ed2f8-e344-4112-905f-78041ab9c525.png)
+![Image_env](https://user-images.githubusercontent.com/58830879/190621889-52106519-957e-4bf7-a50d-815b47f627ab.png)
 7. Run `pipenv install` to install all dependences and create virtual environment.
 8. Run `pipenv shell` activate this project's virtualenv.
 9. In virtualenv run `flask db upgrade` to create a database and apply the migration to the database.
