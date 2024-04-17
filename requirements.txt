@@ -31,4 +31,4 @@ toml==0.10.2
 tzdata==2022.2
 tzlocal==4.2
 urllib3==1.26.12
-Werkzeug==2.2.2
+Werkzeug==2.3.8
